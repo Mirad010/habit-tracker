@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Timer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .container {
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      letter-spacing: 3px;
+    }
+
+    p {
+      color: #ccc;
+      margin-bottom: 40px;
+    }
+
+    .timer {
+      font-size: 6em;
+      font-weight: bold;
+      margin: 30px 0;
+      color: #f0c040;
+    }
+
+    .inputs {
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 80px;
+      padding: 10px;
+      font-size: 1.2em;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      margin: 0 5px;
+    }
+
+    label {
+      font-size: 1em;
+      color: #ccc;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 15px 35px;
+      font-size: 1em;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    #startBtn { background: #f0c040; color: #000; }
+    #pauseBtn { background: white; color: #000; }
+    #resetBtn { background: #e74c3c; color: white; }
+
+    button:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Study Timer</h1>
+    <p>Stay focused. Take breaks. Get things done.</p>
+
+    <div class="inputs">
+      <label>Minutes:</label>
+      <input type="number" id="minuteInput" value="25" min="1" max="60">
+      <label>Seconds:</label>
+      <input type="number" id="secondInput" value="0" min="0" max="59">
+    </div>
+
+    <div class="timer" id="display">25:00</div>
+
+    <div class="buttons">
+      <button id="startBtn" onclick="startTimer()">Start</button>
+      <button id="pauseBtn" onclick="pauseTimer()">Pause</button>
+      <button id="resetBtn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let countdown;
+    let running = false;
+    let totalSeconds = 25 * 60;
+
+    function updateDisplay(seconds) {
+      let m = Math.floor(seconds / 60);
+      let s = seconds % 60;
+      document.getElementById('display').textContent =
+        String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    function startTimer() {
+      if (running) return;
+      totalSeconds = parseInt(document.getElementById('minuteInput').value) * 60 +
+                     parseInt(document.getElementById('secondInput').value);
+      running = true;
+      countdown = setInterval(function() {
+        if (totalSeconds <= 0) {
+          clearInterval(countdown);
+          running = false;
+          alert('Time is up! Take a break!');
+          return;
+        }
+        totalSeconds--;
+        updateDisplay(totalSeconds);
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(countdown);
+      running = false;
+    }
+
+    function resetTimer() {
+      clearInterval(countdown);
+      running = false;
+      totalSeconds = parseInt(document.getElementById('minuteInput').value) * 60 +
+                     parseInt(document.getElementById('secondInput').value);
+      updateDisplay(totalSeconds);
+    }
+  </script>
+
+</body>
+</html>
